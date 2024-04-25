@@ -3,12 +3,20 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient httpClient;
 
-@* 
-AuthorizeRoleView is a Blazor component that authorizes the user based on the roles provided in the Roles parameter. It is designed to be use in a Blazor Web App that uses the default authentication and authorization setup.
+@*
+AuthorizeRoleView is a .NET 8 Blazor component that authorizes the user based on the roles provided in the Roles parameter.
+
+It is designed to be a replacement for `AuthorizeView` when used in a Blazor WebAssembly app.
 
 Requirements:
 
-In order to use this component, the server and client must have an httpClient configured with the base address of the server. 
+AuthorizeRoleView  is designed to be used in a Blazor Web App that uses the default authentication and authorization setup (individual accounts) with the interactive render mode set to WebAssembly and the  interactivity location set to Global.
+
+It works whether or not you are using pre-rendering.
+
+It has not been tested with the per-page/component interactivity location.
+
+The server and client must have an `httpClient` configured with the base address of the server.
 
 On the server side, it looks like this:
 
@@ -68,6 +76,12 @@ For example, to limit the visibility of a NavMenu item in the NavMenu.razor file
         </Authorized>
     </AuthorizeRoleView>
 
+Roles are specified as a comma-separated string.
+
+Just Like `AuthorizeView`, you do not have to specify an `<Authorized>` tag if all you want to show is the authorized content.
+
+However, you can use `<Authorized>`, `<NotAuthorized>`, and `<Authoriaing>` just as you would with `<AuthorizedView>`.
+
 You can also use the IsInRole() method in code, for example in a .razor file:
 
     <AuthorizeRoleView @ref="authorizeRoleView"/>
@@ -80,7 +94,6 @@ You can also use the IsInRole() method in code, for example in a .razor file:
             var isInRole = await authorizeRoleView.IsInRole("admin");
         }
     }
-
 *@
 
 @if (isAuthorized == null)
@@ -118,6 +131,7 @@ else
     // isAuthorized is a nullable bool that gets set internally
     private bool? isAuthorized;
 
+    // AuthorizeRoles is a string array of roles that the user is in
     private string[] AuthorizeRoles = { };
 
     public async Task<bool> IsInRole(string role)
@@ -141,11 +155,35 @@ else
             {
                 // get the roles for the user from the server's API endpoint
                 var roles = await httpClient.GetStringAsync("/api/roles");
+                
+                // valid json string?
                 if (roles != null && !roles.StartsWith("<!DOCTYPE"))
                 {
+                    // deserialize the json string into a string array
                     AuthorizeRoles = JsonSerializer.Deserialize<string[]>(roles);
-                    // authorize if the user is in any of the roles listed in roleList
-                    isAuthorized = AuthorizeRoles.Any(role => roleList.Contains(role));
+
+                    // are roles required?
+                    if (AuthorizeRoles == null || AuthorizeRoles.Length == 0)
+                    {
+                        // no roles required, so authorize
+                        isAuthorized = true;
+                    }
+                    else
+                    {
+                        // are roles specified?
+                        if (roleList.Length == 0)
+                        {
+                            // no roles specified, so authorize
+                            isAuthorized = true;
+                        }
+                        else
+                        {
+                            // roles are specified and roles are required.
+
+                            // authorize if the user is in any of the roles listed in roleList
+                            isAuthorized = AuthorizeRoles.Any(role => roleList.Contains(role));
+                        }
+                    }
                 }
             }
             catch (Exception ex)
