@@ -1,0 +1,157 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using System.Text.Json
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient httpClient;
+
+@* 
+AuthorizeRoleView is a Blazor component that authorizes the user based on the roles provided in the Roles parameter. It is designed to be use in a Blazor Web App that uses the default authentication and authorization setup.
+
+Requirements:
+
+In order to use this component, the server and client must have an httpClient configured with the base address of the server. 
+
+On the server side, it looks like this:
+
+    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7217/") });
+
+Replace the URL with the base address of your server.
+
+On the client side, it looks like this:
+
+    builder.Services.AddScoped(sp => new HttpClient
+    {
+        BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    });
+
+On the server, you must add roles to your configuration like so:
+
+    builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddSignInManager()
+        .AddDefaultTokenProviders();
+
+Lastly, there must be an endpoint on the server that returns the roles for the user like so:
+
+    app.MapGet("/api/roles", async (HttpContext httpContext) =>
+    {
+        var user = httpContext.User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            // Get roles from the claims
+            var roles = user.Claims
+                            .Where(c => c.Type == ClaimTypes.Role)
+                            .Select(c => c.Value)
+                            .ToList();
+
+            if (roles.Any())
+            {
+                return Results.Ok(roles);
+            }
+            return Results.NotFound("No roles found for this user.");
+        }
+        return Results.Unauthorized();
+    }).RequireAuthorization();
+
+Usage:
+
+You can use the AuthorizeRoleView wherever you would use AuthorizeView.
+For example, to limit the visibility of a NavMenu item in the NavMenu.razor file:
+
+    <AuthorizeRoleView Roles="admin, counterClicker">
+        <Authorized>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="counter">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                </NavLink>
+            </div>
+        </Authorized>
+    </AuthorizeRoleView>
+
+You can also use the IsInRole() method in code, for example in a .razor file:
+
+    <AuthorizeRoleView @ref="authorizeRoleView"/>
+
+    @code {
+        AuthorizeRoleView authorizeRoleView;
+
+        protected override async Task OnInitializedAsync()
+        {
+            var isInRole = await authorizeRoleView.IsInRole("admin");
+        }
+    }
+
+*@
+
+@if (isAuthorized == null)
+{
+    @Authorizing
+}
+else if (isAuthorized == true)
+{
+    if (ChildContent != null)
+    {
+        @ChildContent
+    }
+    else if (Authorized != null)
+    {
+        @Authorized
+    }
+}
+else
+{
+    @NotAuthorized
+}
+
+@code {
+
+    // Roles is a comma-delimeted string of role names we want to authorize against
+    [Parameter] public string Roles { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment Authorized { get; set; }
+    [Parameter] public RenderFragment NotAuthorized { get; set; }
+    [Parameter] public RenderFragment Authorizing { get; set; }
+
+    // roleList is a string array created from the Roles string parameter
+    private string[] roleList => Roles?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray() ?? new string[] { };
+
+    // isAuthorized is a nullable bool that gets set internally
+    private bool? isAuthorized;
+
+    private string[] AuthorizeRoles = { };
+
+    public async Task<bool> IsInRole(string role)
+    {
+        // authorize if the user is in the specified role
+        return AuthorizeRoles.Any(r => r == role);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // get the principal (user)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // if not authenticated, just return
+        if (!user.Identity.IsAuthenticated)
+            isAuthorized = false;
+        else
+        {
+            try
+            {
+                // get the roles for the user from the server's API endpoint
+                var roles = await httpClient.GetStringAsync("/api/roles");
+                if (roles != null && !roles.StartsWith("<!DOCTYPE"))
+                {
+                    AuthorizeRoles = JsonSerializer.Deserialize<string[]>(roles);
+                    // authorize if the user is in any of the roles listed in roleList
+                    isAuthorized = AuthorizeRoles.Any(role => roleList.Contains(role));
+                }
+            }
+            catch (Exception ex)
+            {
+                isAuthorized = false;
+            }
+        }
+    }
+}
