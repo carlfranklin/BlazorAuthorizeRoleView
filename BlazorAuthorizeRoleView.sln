@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAuthorizeRoleView", "BlazorAuthorizeRoleView\BlazorAuthorizeRoleView.csproj", "{4A1EF824-3871-4BAE-B07F-084C3A9C7703}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthorizeRoleView", "BlazorAuthorizeRoleView\BlazorAuthorizeRoleView.csproj", "{4A1EF824-3871-4BAE-B07F-084C3A9C7703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmAuthDemo", "WasmAuthDemo\WasmAuthDemo\WasmAuthDemo.csproj", "{50C42B0B-F3E3-461E-9741-02B17226E412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasmAuthDemo.Client", "WasmAuthDemo\WasmAuthDemo.Client\WasmAuthDemo.Client.csproj", "{DE08C407-D856-46A5-A2EA-4C2F3F095BAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4A1EF824-3871-4BAE-B07F-084C3A9C7703}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A1EF824-3871-4BAE-B07F-084C3A9C7703}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A1EF824-3871-4BAE-B07F-084C3A9C7703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50C42B0B-F3E3-461E-9741-02B17226E412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C42B0B-F3E3-461E-9741-02B17226E412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C42B0B-F3E3-461E-9741-02B17226E412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C42B0B-F3E3-461E-9741-02B17226E412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE08C407-D856-46A5-A2EA-4C2F3F095BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE08C407-D856-46A5-A2EA-4C2F3F095BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE08C407-D856-46A5-A2EA-4C2F3F095BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE08C407-D856-46A5-A2EA-4C2F3F095BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
