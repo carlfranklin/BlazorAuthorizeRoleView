@@ -109,11 +109,23 @@ You can also use the `IsInRole()` method in code, for example in a .razor file:
 
 WasmAuthDemo is a Blazor Web App that uses `AuthorizeRoleView` to authorize access to the `Counter` page,  and also uses the `IsInRole()` method in the counter page to authorize incrementing the counter.
 
-If you want to run this, you'll have to create the local database by executing the following command in the package manager:
+If you want to run the demo project, you'll have to:
+
+1. Set **WasmAuthDemo** as the Startup Project
+2. Open the Package Manager Console window and set  **WasmAuthDemo** as the Default Project
+3. Create the local database by executing the following command in the package manager:
 
 ```
 update-database
 ```
 
-You can manage users and roles with the [IdentityManagerLibrary](https://github.com/carlfranklin/IdentityManagerLibrary) tool. Add two roles: admin and counterClicker. Then you can assign the roles to your user(s).
+Run the app and register yourself as a user.
+
+You can manage users and roles with the [IdentityManagerLibrary](https://github.com/carlfranklin/IdentityManagerLibrary) tool. Add two roles: "admin" and "counterClicker." You can then assign the role(s) to your user(s).
+
+Log out and log back in again any time you change users and/or role assignments.
+
+If your user is in the "admin" role, they will see the NavLink to the Counter page on the left.
+
+If your user is in the "counterClicker" role, they will able to increment the counter.
 
