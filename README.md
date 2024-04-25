@@ -4,6 +4,8 @@ AuthorizeRoleView is a .NET 8 Blazor component that authorizes the user based on
 
 It is designed to be a replacement for `AuthorizeView` when used in a Blazor WebAssembly app.
 
+**Nuget:** https://www.nuget.org/packages/BlazorAuthorizeRoleView
+
 ## Requirements:
 
 AuthorizeRoleView  is designed to be used in a Blazor Web App that uses the default authentication and authorization setup (individual accounts) with the interactive render mode set to WebAssembly and the  interactivity location set to Global.

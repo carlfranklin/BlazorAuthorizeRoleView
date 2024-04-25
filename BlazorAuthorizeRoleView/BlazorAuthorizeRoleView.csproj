@@ -4,6 +4,15 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Blazor AuthorizeRoleView Component</Title>
+		<Authors>App vNext</Authors>
+		<Description>AuthorizeRoleView is a .NET 8 Blazor component that authorizes the user based on the roles provided in the Roles parameter.  It is designed to be a replacement for `AuthorizeView` when used in a Blazor WebAssembly app.</Description>
+		<Copyright>Copyright © 2024 by App vNext</Copyright>
+		<PackageProjectUrl>https://github.com/carlfranklin/BlazorAuthorizeRoleView</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/carlfranklin/BlazorAuthorizeRoleView</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
 
@@ -19,6 +28,17 @@
 
 	<ItemGroup>
 	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\LICENSE.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
