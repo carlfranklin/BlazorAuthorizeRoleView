@@ -4,7 +4,14 @@ AuthorizeRoleView is a .NET 8 Blazor component that authorizes the user based on
 
 It is designed to be a replacement for `AuthorizeView` when used in a Blazor WebAssembly app.
 
-**Nuget:** https://www.nuget.org/packages/BlazorAuthorizeRoleView
+It is necessary because of these two GitHub issues:
+
+- https://github.com/dotnet/aspnetcore/issues/52142
+- https://github.com/dotnet/aspnetcore/pull/51177
+
+TLDR: Microsoft removed claims (which includes Roles) from the auth information that comes back from the server in a hosted WebAssembly app in .NET 8. They have their reasons, mostly due to complex scenarios that are difficult to fix. However, if you simply want to retrieve roles for your user, which are just a simple string array, you're out of luck.
+
+**Nuget Package:** https://www.nuget.org/packages/BlazorAuthorizeRoleView
 
 ## Requirements:
 
