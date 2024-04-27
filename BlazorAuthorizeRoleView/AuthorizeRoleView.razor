@@ -134,6 +134,17 @@ else
     // AuthorizeRoles is a string array of roles that the user is in
     private string[] AuthorizeRoles = { };
 
+    public async Task<bool> IsAuthenticated()
+    {
+        // get the principal (user)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        
+        var user = authState.User;
+
+        // if not authenticated, just return
+        return user.Identity.IsAuthenticated;
+    }
+
     public async Task<bool> IsInRole(string role)
     {
         // authorize if the user is in the specified role

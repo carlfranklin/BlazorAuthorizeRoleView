@@ -97,6 +97,21 @@ Just Like `AuthorizeView`, you do not have to specify an `<Authorized>` tag if a
 
 However, you can use `<Authorized>`, `<NotAuthorized>`, and `<Authoriaing>` just as you would with `<AuthorizedView>`.
 
+You can use the `IsAuthenticated()` method in code to determine whether the user is authenticated:
+
+```c#
+<AuthorizeRoleView @ref="authorizeRoleView"/>
+
+@code {
+    AuthorizeRoleView authorizeRoleView;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var isAuthenticated = await authorizeRoleView.IsAuthenticated();
+    }
+}
+```
+
 You can also use the `IsInRole()` method in code, for example in a .razor file:
 
 ```c#
